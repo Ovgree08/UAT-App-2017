@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   StyleSheet,
+  StatusBar,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
@@ -44,19 +45,28 @@ class Home extends React.Component {
         }}
       >
         <View style={styles.listItem}>
-          <View>
-            <Text style={styles.text}>
-              {item.name}
-              {item.id === this.state.loadingId && ' (Loading)'}
-            </Text>
+          <View style={{ flex: 0 }}>
+            <Image
+              defaultSource={require('../../assets/notfound.jpg')}
+              source={{ uri: `http://162.243.240.17/${item.avatar}`}}
+              style={{ width: 60, height: 60 }}
+            />
           </View>
-          <View><Text>{item.description}</Text></View>
+          <View style={{ flexDirection: 'column', marginTop: 2, paddingHorizontal: 20, justifyContent: 'flex-start' }}>
+            <View>
+              <Text style={styles.text}>
+                {item.username}
+                {item.id === this.state.loadingId && ' (Loading)'}
+              </Text>
+            </View>
+            <View><Text style={styles.smallText}>Description goes here</Text></View>
+          </View>
         </View>
       </TouchableOpacity>
     );
   };
   keyExtractor(item) {
-    return item.name;
+    return item.id;
   }
   render() {
     const { navigation, organizations } = this.props;
@@ -64,12 +74,15 @@ class Home extends React.Component {
 
     const filteredOrganizations = organizations.filter(org => {
       if (searchText === '') return true;
-      if (org.name.toLowerCase().startsWith(searchText.toLowerCase()))
+      if (org.username.toLowerCase().startsWith(searchText.toLowerCase()))
         return true;
     });
 
     return (
       <View style={styles.container}>
+        <StatusBar
+          barStyle="dark-content"
+        />
         {this.props.loading
           ? <View><Text>Loading</Text></View>
           : <View>
@@ -139,20 +152,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    paddingVertical: 10,
+    paddingVertical: 15,
     flex: 1,
     paddingHorizontal: 10,
+    flexDirection: 'row'
   },
   separator: {
-    backgroundColor: '#555',
+    backgroundColor: '#bbb',
     height: 1,
     marginHorizontal: 10,
   },
   text: {
-    color: '#222',
-    fontWeight: 'bold',
+    color: '#0f407b',
+    fontWeight: '500',
     fontSize: 18,
+    marginBottom: 5
   },
+  smallText: {
+    color: '#979797',
+    fontSize: 12
+  }
 });
 
 export default connect(state => ({
