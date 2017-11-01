@@ -61,7 +61,7 @@ export const fetchEvents = id => dispatch => {
     dispatch(startEvents());
     setTimeout(() => {
       axios
-        .get(`http://192.168.1.168:3001/events/${id}`)
+        .get(`http://104.236.123.82/events/${id}`)
         .then(data => {
           dispatch(loadEvents(data.data));
           resolve();

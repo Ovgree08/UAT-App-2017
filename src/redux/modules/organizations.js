@@ -60,7 +60,7 @@ export const fetchOrganizations = () => dispatch => {
   dispatch(startOrgs());
   setTimeout(() => {
     axios
-      .get('http://192.168.1.168:3001/organizations')
+      .get('http://104.236.123.82/organizations')
       .then(data => dispatch(loadOrgs(data.data)))
       .catch(err => dispatch(errorOrgs(err)));
   }, 1000);

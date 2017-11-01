@@ -26,7 +26,7 @@ class EventsMain extends React.Component {
   submit = state => {
     this.props.dispatch(startAuth());
     setTimeout(() => {
-      axios.post('http://localhost:4000/auth', state).then(data => {
+      axios.post('http://104.236.123.82/auth', state).then(data => {
         if (data.data.success === true) {
           this.props.dispatch(loadAuth(data.data));
           this.setModalVisible(false);
