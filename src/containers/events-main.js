@@ -73,9 +73,10 @@ EventsMain.navigationOptions = {
   headerTintColor: '#0f407b',
   headerStyle: {
     backgroundColor: 'white',
-    paddingTop: 20,
-    height: 80,
+    paddingTop: 0,
+    height: 60,
     shadowOpacity: 0,
+    justifyContent: 'center'
   },
   headerTitle: (
     <Image

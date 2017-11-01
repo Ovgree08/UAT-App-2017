@@ -23,7 +23,7 @@ class Events extends React.Component {
     today.setHours(0, 0, 0, 0);
 
     const bg =
-      date < today ? '#4eb5e2' : date === today ? '#ffa200' : '#0f407b';
+      date < today ? '#4eb5e2' : date.toString() === today.toString() ? '#ffa200' : '#0f407b';
 
     const { navigation } = this.props;
     const { organization } = navigation.state.params;
@@ -61,7 +61,8 @@ class Events extends React.Component {
           </View>
           <View style={{ flex: 0 }}>
             <Image
-              source={require('../../assets/event-logo.png')}
+              defaultSource={require('../../assets/notfound.jpg')}
+              source={{ uri: `http://162.243.240.17/${item.photo}`}}
               style={{ width: 105, height: 65 }}
             />
           </View>
@@ -85,17 +86,19 @@ class Events extends React.Component {
     );
   };
   keyExtractor(item) {
-    return item.name;
+    return item.id;
   }
   render() {
     const { navigation, events } = this.props;
     const { organization } = navigation.state.params;
 
+    console.log('events', events)
+
     return (
       <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.left}>
-            <Text style={styles.orgName}>{organization.name}</Text>
+            <Text style={styles.orgName}>{organization.username}</Text>
             <Text style={styles.events}>EVENTS</Text>
           </View>
           <View style={styles.right}>
@@ -116,7 +119,7 @@ class Events extends React.Component {
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <FlatList
             style={styles.flatList}
-            data={events.events}
+            data={events}
             keyExtractor={this.keyExtractor}
             renderItem={this.renderItem}
           />
@@ -130,9 +133,10 @@ Events.navigationOptions = {
   headerTintColor: '#0f407b',
   headerStyle: {
     backgroundColor: 'white',
-    paddingTop: 20,
-    height: 80,
+    paddingTop: 0,
+    height: 60,
     shadowOpacity: 0,
+    justifyContent: 'center'
   },
   headerTitle: (
     <Image

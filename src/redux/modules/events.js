@@ -46,9 +46,9 @@ const startEvents = () => ({
   type: START_EVENTS,
 });
 
-const loadEvents = EVENTS => ({
+const loadEvents = events => ({
   type: LOAD_EVENTS,
-  data: EVENTS,
+  data: events,
 });
 
 const errorEvents = error => ({
@@ -59,16 +59,14 @@ const errorEvents = error => ({
 export const fetchEvents = id => dispatch => {
   return new Promise((resolve, reject) => {
     dispatch(startEvents());
-    setTimeout(() => {
-      axios
-        .get(`http://104.236.123.82/events/${id}`)
-        .then(data => {
-          dispatch(loadEvents(data.data));
-          resolve();
-        })
-        .catch(err => {
-          reject(err);
-        });
-    }, 1000);
+    axios
+      .get(`http://104.236.123.82/events/${id}`)
+      .then(data => {
+        dispatch(loadEvents(data.data));
+        resolve();
+      })
+      .catch(err => {
+        reject(err);
+      });
   });
 };
