@@ -2,34 +2,34 @@ import axios from 'axios';
 
 // Constants
 
-const START_EVENTS = 'START_EVENTS';
-const LOAD_EVENTS = 'LOAD_EVENTS';
-const ERROR_EVENTS = 'ERROR_EVENTS';
+const START_ATHLETES = 'START_ATHLETES';
+const LOAD_ATHLETES = 'LOAD_ATHLETES';
+const ERROR_ATHLETES = 'ERROR_ATHLETES';
 
 // Initial State
 
 const initialState = {
   loading: false,
   error: null,
-  events: [],
+  athletes: [],
 };
 
 // Reducer
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
-    case START_EVENTS:
+    case START_ATHLETES:
       return {
         ...state,
         loading: true,
       };
-    case LOAD_EVENTS:
+    case LOAD_ATHLETES:
       return {
         ...state,
         loading: false,
-        events: action.data,
+        athletes: action.data,
       };
-    case ERROR_EVENTS:
+    case ERROR_ATHLETES:
       return {
         ...state,
         loading: false,
@@ -42,28 +42,28 @@ export default function reducer(state = initialState, action = {}) {
 
 // Actions
 
-const startEvents = () => ({
-  type: START_EVENTS,
+const startAthletes = () => ({
+  type: START_ATHLETES,
 });
 
-const loadEvents = events => ({
-  type: LOAD_EVENTS,
+const loadAthletes = events => ({
+  type: LOAD_ATHLETES,
   data: events,
 });
 
-const errorEvents = error => ({
-  type: ERROR_EVENTS,
+const errorAthletes = error => ({
+  type: ERROR_ATHLETES,
   data: error,
 });
 
-export const fetchEvents = id => dispatch => {
+export const fetchAthletes = id => dispatch => {
   return new Promise((resolve, reject) => {
-    dispatch(startEvents());
+    dispatch(startAthletes());
     axios
-      .get(`http://104.236.123.82/events/${id}`)
-      //.get(`http://192.168.1.168:4000/events/${id}`)
+      .get(`http://104.236.123.82/athletes/${id}`)
+      //.get(`http://192.168.1.168:4000/athletes/${id}`)
       .then(data => {
-        dispatch(loadEvents(data.data));
+        dispatch(loadAthletes(data.data));
         resolve();
       })
       .catch(err => {

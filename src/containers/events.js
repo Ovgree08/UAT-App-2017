@@ -23,14 +23,16 @@ class Events extends React.Component {
     today.setHours(0, 0, 0, 0);
 
     const bg =
-      date < today ? '#4eb5e2' : date.toString() === today.toString() ? '#ffa200' : '#0f407b';
+      date < today
+        ? '#4eb5e2'
+        : date.toString() === today.toString() ? '#ffa200' : '#0f407b';
 
     const { navigation } = this.props;
     const { organization } = navigation.state.params;
     return (
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('EventsMain', { organization, item });
+          navigation.navigate('Event', { organization, item });
         }}
       >
         <View style={styles.listItem}>
@@ -62,7 +64,7 @@ class Events extends React.Component {
           <View style={{ flex: 0 }}>
             <Image
               defaultSource={require('../../assets/notfound.jpg')}
-              source={{ uri: `http://162.243.240.17/${item.photo}`}}
+              source={{ uri: `http://162.243.240.17/${item.photo}` }}
               style={{ width: 105, height: 65 }}
             />
           </View>
@@ -91,8 +93,6 @@ class Events extends React.Component {
   render() {
     const { navigation, events } = this.props;
     const { organization } = navigation.state.params;
-
-    console.log('events', events)
 
     return (
       <View style={styles.container}>
@@ -136,7 +136,7 @@ Events.navigationOptions = {
     paddingTop: 0,
     height: 60,
     shadowOpacity: 0,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitle: (
     <Image

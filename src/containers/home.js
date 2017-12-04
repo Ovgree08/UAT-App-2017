@@ -48,18 +48,27 @@ class Home extends React.Component {
           <View style={{ flex: 0 }}>
             <Image
               defaultSource={require('../../assets/notfound.jpg')}
-              source={{ uri: `http://162.243.240.17/${item.avatar}`}}
+              source={{ uri: `http://162.243.240.17${item.avatar}` }}
               style={{ width: 60, height: 60 }}
             />
           </View>
-          <View style={{ flexDirection: 'column', marginTop: 2, paddingHorizontal: 20, justifyContent: 'flex-start' }}>
+          <View
+            style={{
+              flexDirection: 'column',
+              marginTop: 2,
+              paddingHorizontal: 20,
+              justifyContent: 'flex-start',
+            }}
+          >
             <View>
               <Text style={styles.text}>
                 {item.username}
                 {item.id === this.state.loadingId && ' (Loading)'}
               </Text>
             </View>
-            <View><Text style={styles.smallText}>Description goes here</Text></View>
+            <View>
+              <Text style={styles.smallText}>Description goes here</Text>
+            </View>
           </View>
         </View>
       </TouchableOpacity>
@@ -80,29 +89,31 @@ class Home extends React.Component {
 
     return (
       <View style={styles.container}>
-        <StatusBar
-          barStyle="dark-content"
-        />
-        {this.props.loading
-          ? <View><Text>Loading</Text></View>
-          : <View>
-              <View style={styles.searchContainer}>
-                <TextInput
-                  style={styles.searchInput}
-                  onChangeText={searchText => this.setState({ searchText })}
-                  value={this.state.text}
-                  placeholder="Search"
-                />
-              </View>
-              <Separator />
-              <FlatList
-                style={styles.flatList}
-                ItemSeparatorComponent={Separator}
-                data={filteredOrganizations}
-                keyExtractor={this.keyExtractor}
-                renderItem={this.renderItem}
+        <StatusBar barStyle="dark-content" />
+        {this.props.loading ? (
+          <View>
+            <Text>Loading</Text>
+          </View>
+        ) : (
+          <View>
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                onChangeText={searchText => this.setState({ searchText })}
+                value={this.state.text}
+                placeholder="Search"
               />
-            </View>}
+            </View>
+            <Separator />
+            <FlatList
+              style={styles.flatList}
+              ItemSeparatorComponent={Separator}
+              data={filteredOrganizations}
+              keyExtractor={this.keyExtractor}
+              renderItem={this.renderItem}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -115,7 +126,7 @@ Home.navigationOptions = {
     paddingTop: 0,
     height: 60,
     shadowOpacity: 0,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerLeft: (
     <Image
@@ -156,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     flex: 1,
     paddingHorizontal: 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   separator: {
     backgroundColor: '#bbb',
@@ -167,12 +178,12 @@ const styles = StyleSheet.create({
     color: '#0f407b',
     fontWeight: '500',
     fontSize: 18,
-    marginBottom: 5
+    marginBottom: 5,
   },
   smallText: {
     color: '#979797',
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 });
 
 export default connect(state => ({
