@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { startAuth, loadAuth, errorAuth } from '../redux/modules/user';
+import { startAuth, loadAuth, errorAuth, logout } from '../redux/modules/user';
 import axios from 'axios';
 
 import { fetchTests } from '../redux/modules/tests';
@@ -10,6 +10,7 @@ import { fetchAthletes } from '../redux/modules/athletes';
 import Tabs from '../components/tabs';
 import Notify from '../components/notify';
 import Scores from '../components/scores';
+import AthleteBar from '../components/athlete-bar';
 
 import {
   Modal,
@@ -22,30 +23,67 @@ import {
   TouchableHighlight,
 } from 'react-native';
 
-import LoginForm from '../components/login-form';
+import prompt from 'react-native-prompt-android';
 
 class Event extends React.Component {
-  // submit = state => {
-  //   this.props.dispatch(startAuth());
-  //   setTimeout(() => {
-  //     axios.post('http://104.236.123.82/auth', state).then(data => {
-  //       if (data.data.success === true) {
-  //         this.props.dispatch(loadAuth(data.data));
-  //         this.setModalVisible(false);
-  //       } else {
-  //         this.props.dispatch(errorAuth(data.data));
-  //       }
-  //     });
-  //   }, 1000);
-  // };
   state = {
     tabIndex: 'overall',
   };
+
+  logout = () => {
+    this.props.dispatch(logout());
+  };
+
+  addAthlete = () => {
+    this.props.navigation.navigate('AthleteForm', {
+      item: this.props.navigation.state.params.item,
+    });
+  };
+
+  beginAuth = () => {
+    prompt(
+      'Enter password',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: password => {
+            axios
+              .post('http://162.243.240.17:3000/auth', {
+                id: this.props.navigation.state.params.item.id,
+                password: password,
+              })
+              .then(data => {
+                if (data.data.success === true) {
+                  this.props.dispatch(loadAuth(data.data));
+                } else {
+                  alert(data.data.message);
+                }
+              })
+              .catch(err => alert(err));
+          },
+        },
+      ],
+      {
+        type: 'secure-text',
+        cancelable: false,
+        defaultValue: '',
+        placeholder: 'placeholder',
+      }
+    );
+  };
+
   changeTab = tabIndex => {
     this.setState({
       tabIndex,
     });
   };
+
   componentDidMount() {
     if (this.props.navigation.state.params.item.id) {
       this.props.dispatch(
@@ -72,9 +110,15 @@ class Event extends React.Component {
             </View>
           </View>
           <View style={{ flex: 0 }}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>ADMIN</Text>
-            </TouchableOpacity>
+            {this.props.token ? (
+              <TouchableOpacity style={styles.button} onPress={this.logout}>
+                <Text style={styles.buttonText}>LOGOUT</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.button} onPress={this.beginAuth}>
+                <Text style={styles.buttonText}>ADMIN</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
@@ -95,8 +139,10 @@ class Event extends React.Component {
             athletes={this.props.athletes}
             scores={this.props.scores}
             tests={this.props.tests}
+            editable={this.props.token !== null}
           />
         )}
+        {this.props.token && <AthleteBar onPress={this.addAthlete} />}
       </View>
     );
   }

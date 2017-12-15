@@ -5,6 +5,7 @@ import axios from 'axios';
 const START_AUTHENTICATION = 'START_AUTHENTICATION';
 const LOAD_AUTHENTICATION = 'LOAD_AUTHENTICATION';
 const ERROR_AUTHENTICATION = 'ERROR_AUTHENTICATION';
+const LOGOUT = 'LOGOUT';
 
 // Initial State
 
@@ -35,6 +36,12 @@ export default function reducer(state = initialState, action = {}) {
         loading: false,
         error: action.data.message,
       };
+    case LOGOUT:
+      return {
+        ...state,
+        loading: false,
+        token: null,
+      };
     default:
       return state;
   }
@@ -54,4 +61,8 @@ export const loadAuth = token => ({
 export const errorAuth = error => ({
   type: ERROR_AUTHENTICATION,
   data: error,
+});
+
+export const logout = () => ({
+  type: LOGOUT,
 });

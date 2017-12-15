@@ -28,7 +28,7 @@ class Athlete extends React.Component {
       test_id: test.id,
       user_id: this.props.item.id,
     });
-    s.result = score ? score.performance : 'N/A';
+    s.result = score ? score.performance + this.getSuffix(test) : 'N/A';
     s.score = score ? score.score : 'N/A';
     return s;
   };
@@ -80,10 +80,7 @@ class Athlete extends React.Component {
                   <Text style={styles.white}>{t.activity}</Text>
                 </View>
                 <View style={{ width: '20%' }}>
-                  <Text style={styles.white}>
-                    {data.result}
-                    {this.getSuffix(t)}
-                  </Text>
+                  <Text style={styles.white}>{data.result}</Text>
                 </View>
                 <View style={{ width: '20%' }}>
                   <Text style={[styles.white, { textAlign: 'center' }]}>

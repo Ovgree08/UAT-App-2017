@@ -60,7 +60,7 @@ export const fetchAthletes = id => dispatch => {
   return new Promise((resolve, reject) => {
     dispatch(startAthletes());
     axios
-      .get(`http://104.236.123.82/athletes/${id}`)
+      .get(`http://162.243.240.17:3000/athletes/${id}`)
       //.get(`http://192.168.1.168:4000/athletes/${id}`)
       .then(data => {
         dispatch(loadAthletes(data.data));
@@ -69,5 +69,26 @@ export const fetchAthletes = id => dispatch => {
       .catch(err => {
         reject(err);
       });
+  });
+};
+
+export const addAthlete = athlete => dispatch => {
+  let body = {};
+  body.athlete_name = athlete.firstName + ' ' + athlete.lastName;
+  body.athlete_id = parseInt(athlete.athleteId);
+  body.event_id = athlete.event_id;
+  return new Promise((resolve, reject) => {
+    axios
+      .post('http://162.243.240.17:3000/athletes/create', body)
+      .then(data => {
+        if (data.data && data.data.insertId) {
+          dispatch(fetchAthletes(athlete.event_id));
+          resolve();
+        } else {
+          alert(data.data.message);
+          reject();
+        }
+      })
+      .catch(err => alert(err));
   });
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 
 import {
   View,
@@ -9,6 +10,10 @@ import {
   FlatList,
   Modal,
 } from 'react-native';
+
+import prompt from 'react-native-prompt-android';
+
+import { addScore } from '../redux/modules/scores';
 
 import Athlete from './athlete-view';
 
@@ -32,6 +37,38 @@ class Scores extends React.Component {
       modalOpen: false,
       activeItem: null,
     });
+  };
+
+  edit = item => {
+    prompt(
+      'Enter result',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: score => {
+            this.props.dispatch(
+              addScore(
+                item,
+                this.props.tests[this.props.tabIndex].id,
+                score,
+                this.props.token
+              )
+            );
+          },
+        },
+      ],
+      {
+        defaultValue:
+          item.result !== 'N/A' ? item.result.replace(/\D/g, '') : '',
+        placeholder: 'placeholder',
+      }
+    );
   };
 
   getOverall = () => {
@@ -90,6 +127,7 @@ class Scores extends React.Component {
       });
       a.result = score ? score.performance + this.getSuffix(test) : 'N/A';
       a.score = score ? score.score : 'N/A';
+      a.scoreId = score ? score.id : null;
       return a;
     });
   };
@@ -119,9 +157,19 @@ class Scores extends React.Component {
             <Text style={styles.name}>{item.athlete_name}</Text>
           </TouchableOpacity>
         </View>
-        <View style={{ width: '15%' }}>
-          <Text style={styles.score}>{item.result}</Text>
-        </View>
+        {this.props.editable ? (
+          <TouchableOpacity
+            onPress={this.edit.bind(null, item)}
+            style={{ width: '15%' }}
+          >
+            <Text style={styles.score}>{item.result}</Text>
+          </TouchableOpacity>
+        ) : (
+          <View style={{ width: '15%' }}>
+            <Text style={styles.score}>{item.result}</Text>
+          </View>
+        )}
+
         <View style={{ width: '15%' }}>
           <Text style={styles.score}>{item.score}</Text>
         </View>
@@ -232,4 +280,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Scores;
+export default connect(state => ({
+  token: state.user.token,
+}))(Scores);

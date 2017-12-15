@@ -60,7 +60,7 @@ export const fetchScores = id => dispatch => {
   return new Promise((resolve, reject) => {
     dispatch(startScores());
     axios
-      .get(`http://104.236.123.82/scores/${id}`)
+      .get(`http://162.243.240.17:3000/scores/${id}`)
       //.get(`http://192.168.1.168:4000/scores/${id}`)
       .then(data => {
         dispatch(loadScores(data.data));
@@ -69,5 +69,29 @@ export const fetchScores = id => dispatch => {
       .catch(err => {
         reject(err);
       });
+  });
+};
+
+export const addScore = (item, testId, score, token) => dispatch => {
+  let payload = {};
+  payload.id = item.scoreId;
+  payload.event_id = item.event_id;
+  payload.user_id = item.id;
+  payload.test_id = testId;
+  payload.performance = score;
+  payload.token = token;
+  return new Promise((resolve, reject) => {
+    axios
+      .post('http://162.243.240.17:3000/scores/create', payload)
+      .then(data => {
+        if (data.data && data.data.insertId) {
+          dispatch(fetchScores(item.event_id));
+          resolve();
+        } else {
+          console.log(data);
+          reject();
+        }
+      })
+      .catch(err => alert(err));
   });
 };

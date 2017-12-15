@@ -60,7 +60,7 @@ export const fetchEvents = id => dispatch => {
   return new Promise((resolve, reject) => {
     dispatch(startEvents());
     axios
-      .get(`http://104.236.123.82/events/${id}`)
+      .get(`http://162.243.240.17:3000/events/${id}`)
       //.get(`http://192.168.1.168:4000/events/${id}`)
       .then(data => {
         dispatch(loadEvents(data.data));

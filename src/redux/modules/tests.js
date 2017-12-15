@@ -60,7 +60,7 @@ export const fetchTests = id => dispatch => {
   return new Promise((resolve, reject) => {
     dispatch(startTests());
     axios
-      .get(`http://104.236.123.82/tests/${id}`)
+      .get(`http://162.243.240.17:3000/tests/${id}`)
       //.get(`http://192.168.1.168:4000/tests/${id}`)
       .then(data => {
         dispatch(loadTests(data.data));
